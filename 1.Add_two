@@ -1,0 +1,29 @@
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Example:
+
+Given nums = [2, 7, 11, 15], target = 9,
+
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+=======================================
+class find(object):
+    def looks(self,num,target):
+        mylist=[(v,i) for i,v in enumerate(num)]
+        mylist.sort()
+        begin,end=0,len(num)-1
+        
+        while begin < end:
+            curr=mylist[begin][0]+mylist[end][0]
+            if curr==target:
+                return(mylist[begin][1],mylist[end][1])
+            elif curr>target:
+                end-=1
+            else:
+                begin+=1
+
+if __name__=="__main__":
+    s=find()
+    print(s.looks([3,2,1,7,9],9))
