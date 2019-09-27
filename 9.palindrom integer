@@ -1,0 +1,18 @@
+def palindrom(x:int):
+    
+    if x<0 or (x%10==0 and x!=0):
+        print("not a palindrom number")
+        return 0
+    
+    rnum=0
+    while (x>rnum):
+        temp=x%10
+        rnum=rnum*10+temp
+        x=int(x/10)
+    
+    if x==rnum or x==int(rnum/10):
+        print("this is palindrom number")
+    else:
+        print("not a palindrom number")
+        
+palindrom(10)
