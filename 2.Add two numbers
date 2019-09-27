@@ -1,0 +1,77 @@
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Example:
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+Explanation: 342 + 465 = 807.
+
+
+
+import random
+class listnode(object):
+    def __init__(self,x):  #form a class of node
+        self.val=x
+        self.next=None
+        
+class formlist(object):      
+    def __init__(self,x):
+        self.head=listnode(0); #a dummy head
+        self.curr=self.head
+        self.num=0
+        while self.num<x:
+           self.mynode=listnode(random.randint(0,9))
+           self.curr.next=self.mynode
+           self.curr=self.mynode
+           self.num+=1
+        self.curr.next=None
+    
+    def append_list(self,x):
+        self.list1=[]
+        x=x.next
+        while x:
+            self.list1.append(x.val)
+            x=x.next
+        print("The list value is ",self.list1)
+
+    def addnodes(self,list1,list2):
+        head=listnode(0)
+        curr=head
+        amount=0
+        carry=0
+        turn=1
+        list1=list1.next
+        list2=list2.next
+        while list1 or list2:
+            amount=0
+            if list1:
+                amount+=list1.val
+                #print("in List1,list1 data is",list1.val)
+                list1=list1.next
+            if list2:
+                amount+=list2.val
+                #print("in list2,list2 data is ",list2.val)
+                list2=list2.next
+            amount+=carry
+            newnode=listnode(amount%10)
+            carry=int(amount/10)
+            curr.next=newnode
+            curr=curr.next
+            turn+=1
+        
+        head=head.next
+        output=[]
+        while head :
+            output.append(head.val)
+            head=head.next
+        print("The list add result is ",output)
+
+if __name__=="__main__":
+    link1=formlist(9)
+    link2=formlist(8)
+    link1.append_list(link1.head)
+    link2.append_list(link2.head)
+    addlink=formlist(15)
+    addlink.addnodes(link1.head,link2.head)
