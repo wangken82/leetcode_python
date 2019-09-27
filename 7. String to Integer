@@ -1,0 +1,32 @@
+def convert(string:str):
+    ispos=1
+    string=string.strip()
+    
+    length=len(string)
+    start=0
+    result=0
+    if string[0] == "-":
+        ispos=-1
+        start=1
+    elif string[0]=="+":
+        ispos=1
+        start=1
+    elif string[0].isalpha():
+            return 0
+    print(string[start:])
+    for char in string[start:]:
+        #if not char.isdigit():
+            #break
+        if char.isdigit():
+            result = result * 10 + int(char)
+        print(char)
+    
+    if result>2**32:
+        print("too big")
+    res=result*ispos
+    
+    print(res)
+    
+    
+    
+convert("1234567")   
