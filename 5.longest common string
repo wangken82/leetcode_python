@@ -1,0 +1,38 @@
+Input :  X = "GeeksforGeeks", 
+         Y = "GeeksQuiz"
+Output : Geeks
+
+Input : X = "zxabcdezy", 
+        Y = "yzabcdezx"
+Output : abcdez
+
+def getmax(string1,string2):
+    len1=len(string1)
+    len2=len(string2)
+    res=[[0 for i in range(0,len1)] for j in range(0,len2)]
+    length=0
+    row=0
+    col=0
+    common_str=""
+    for i in range(0,len2):
+        for j in range (0,len1):
+            if (string2[i]==string1[j]):
+                if (i>0)and (j>0):
+                    res[i][j]=res[i-1][j-1]+1
+                    if (length < res[i][j]):
+                        length=res[i][j]
+                        row=i
+                        col=j
+                else:
+                    res[i][j]=1
+    print(row,col,length)
+    print(res)
+    print(res[row][col])
+    while res[row][col]:
+        #print(res[row][col])
+        common_str+=string1[row]
+        row-=1
+        col-=1
+    print(''.join(reversed(common_str)))
+    
+getmax("tgoodeea","lgoodda")
