@@ -38,6 +38,5 @@ longest_string("abcbadfadfewddedd")
 output:
 The start character index is  0 length 5
 abcba
-12
 The start character index is  12 length 5
 ddedd
