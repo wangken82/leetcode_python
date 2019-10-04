@@ -1,0 +1,70 @@
+54. Spiral Matrix
+Medium
+
+1402
+
+452
+
+Favorite
+
+Share
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+Output: [1,2,3,6,9,8,7,4,5]
+Example 2:
+
+Input:
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+
+
+
+def listspare(nums):
+    if not nums:
+        print("Null array, Exit")
+        return -1
+    row=len(nums)
+    line=len(nums[0])
+    print(row,line)
+    dir=0 #director control if dir=0 from left to right, dir=1 up->down,dir-2 right->left, dir3 down->up
+    Top=0
+    Bottom=len(nums)-1
+    Left=0
+    Right=line-1
+    
+    while(Top<=Bottom) and (Left<=Right):
+        if (dir==0): #moving from left to right
+            for i in range(Left,Right+1):
+                print(nums[Top][i])
+            Top+=1
+            dir=1 
+        elif (dir==1):#moving from top to down
+            for i in range(Top,Bottom+1):
+                print(nums[i][Right])
+            Right-=1
+            dir=2
+        elif (dir==2):#moing from right to left
+            #print("Bottom",Bottom)
+            for i in range(Right,Left-1,-1):
+                print(nums[Bottom][i])
+            Bottom-=1
+            dir=3
+        else: #moving from down to up
+            for i in range(Bottom,Top-1,-1):
+                print(nums[i][Left])
+            Left+=1
+            dir=0     
+    
+listspare([(1,2,3,4),(5,6,7,8),(9,10,11,12),(13,14,15,16)])
