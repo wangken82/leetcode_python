@@ -1,0 +1,39 @@
+
+Given the sorted array: [-10,-3,0,5,9],
+
+One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+
+
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        if   nums == []:      
+            return None
+        start = 0
+        end = len(nums)
+        mid = (start+end)//2
+        cur_root = TreeNode(nums[mid]) 
+		#every time call sortedArrayToBST() mid will change and get a new list as input of next iteration
+        cur_root.left = self.sortedArrayToBST(nums[start:mid])  
+        cur_root.right = self.sortedArrayToBST(nums[mid+1:end])
+        return cur_root
+        Example:
