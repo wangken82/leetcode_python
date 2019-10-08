@@ -1,0 +1,74 @@
+
+Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+Example:
+
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+
+l = [1,2,2,2]
+
+def powerset(xs):
+    result= [[]]
+    for x in xs:
+        print("this is x",x)
+        newsubsets = [subset + [x] for subset in result]
+        print("newsubsets",newsubsets)
+        for j in newsubsets:
+            print("j is",j)
+            if j not in result:
+                print("J not in result",j)
+                result.extend([j])
+                print("result",result)
+    return result
+
+print(powerset(l))
+
+output
+this is x 1
+newsubsets [[1]]
+j is [1]
+J not in result [1]
+result [[], [1]]
+this is x 2
+newsubsets [[2], [1, 2]]
+j is [2]
+J not in result [2]
+result [[], [1], [2]]
+j is [1, 2]
+J not in result [1, 2]
+result [[], [1], [2], [1, 2]]
+this is x 2
+newsubsets [[2], [1, 2], [2, 2], [1, 2, 2]]
+j is [2]
+j is [1, 2]
+j is [2, 2]
+J not in result [2, 2]
+result [[], [1], [2], [1, 2], [2, 2]]
+j is [1, 2, 2]
+J not in result [1, 2, 2]
+result [[], [1], [2], [1, 2], [2, 2], [1, 2, 2]]
+this is x 2
+newsubsets [[2], [1, 2], [2, 2], [1, 2, 2], [2, 2, 2], [1, 2, 2, 2]]
+j is [2]
+j is [1, 2]
+j is [2, 2]
+j is [1, 2, 2]
+j is [2, 2, 2]
+J not in result [2, 2, 2]
+result [[], [1], [2], [1, 2], [2, 2], [1, 2, 2], [2, 2, 2]]
+j is [1, 2, 2, 2]
+J not in result [1, 2, 2, 2]
+result [[], [1], [2], [1, 2], [2, 2], [1, 2, 2], [2, 2, 2], [1, 2, 2, 2]]
+[[], [1], [2], [1, 2], [2, 2], [1, 2, 2], [2, 2, 2], [1, 2, 2, 2]]
