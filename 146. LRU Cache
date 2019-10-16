@@ -1,0 +1,96 @@
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+The cache is initialized with a positive capacity.
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+Example:
+
+LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+=============================================================
+Python Code
+
+class node(object):
+    def __init__(self,key,value):
+        self.key = key
+        self.value = value
+        self.next = None
+        self.prev = None
+
+class LRU(object):
+    def __init__(self,capacity):
+        self.capacity = capacity
+        self.mydict = {}
+        self.head = node(0,0)
+        self.tail = node(0,0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        
+    def get(self,key):
+        if key  not in self.mydict:
+            print(-1)
+        else:
+            n = self.mydict[key]
+            self._remove(n)
+            self._add(n)
+            print(n.value)
+         
+    
+    def put(self,key,value):
+        if key in self.mydict:
+            self._remove(self.mydict[key])
+            del self.mydict[key]
+        elif len(self.mydict)== self.capacity:  # capacity is reached
+            n = self.head.next
+            self._remove(n)
+            del self.mydict[n.key]
+        newnode = node(key,value)
+        self.mydict[key] = newnode
+        self._add(newnode)
+                 
+    
+    def _add(self,node):
+        Last_Pre_node = self.tail.prev
+        Last_Pre_node.next = node
+        node.prev = Last_Pre_node
+        node.next = self.tail
+        self.tail.prev = node
+        
+    def _remove(self,node):
+        p = node.prev
+        p.next = node.next
+        node.next.prev = p
+        
+if __name__ == "__main__":
+    abc = LRU(2)
+    abc.put(1,1)
+    abc.put(2,2)
+    abc.get(1)
+    abc.put(3,3)
+    abc.get(2)
+    abc.put(4,4)
+    abc.get(1)
+    abc.get(3)
+    abc.get(4)
+
+    
+    output:
+    1
+-1
+-1
+3
+4
