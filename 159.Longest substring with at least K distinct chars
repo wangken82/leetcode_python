@@ -1,0 +1,48 @@
+def findmaxK(nums:str,k:int):
+    i,j,maxlen=0,0,0
+   
+    temp={}
+    index={}
+    index[0] = 0
+    for i in range(0,len(nums)-1):
+        while (j < len(nums)-1 ) and len(temp)<=k:
+            temp_key = nums[j]
+            if temp_key in temp:
+                temp[temp_key] +=1
+            else:
+                if len(temp)==k:
+                    break
+                else:
+                    temp[temp_key] = 1
+            j += 1
+        
+        
+        if (j -i) > maxlen:
+            index.clear() #make sure only the max length stores there, here removes all the items
+            index[i] = j
+        elif (j-i) == maxlen:
+            index[i] =j
+       
+        maxlen = max(maxlen,j-i)
+        
+        if (nums[i] in temp):
+            if temp[nums[i]] >1:
+                temp[nums[i]] -=1
+            else:
+                del temp[nums[i]]
+    for i,j in index.items():
+        print("Start index at {0} ,the Strings are {1}".format(i,nums[i:j+1]))
+        #print("Start index at %s,Whole output %s",% (nums[i],nums[i:j+1]) )
+   
+    return maxlen
+
+findmaxK("aabacbebebjceckbebebce",3)
+
+
+output:====================================
+Start index at 0 ,the Strings are aabacbe
+Start index at 4 ,the Strings are cbebebj
+Start index at 5 ,the Strings are bebebjc
+Start index at 14 ,the Strings are kbebebc
+Start index at 15 ,the Strings are bebebce
+
