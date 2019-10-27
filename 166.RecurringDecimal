@@ -1,0 +1,34 @@
+def RecurringDecimal(numerator:int,denominator:int):
+    numerator = abs(numerator)
+    denominator = abs(denominator)
+    negative_flag = numerator * denominator < 0
+    
+    numList=[]
+    cnt = 0
+    loopDict = dict()  #store the numerator in a dict, if duplicate numerator, then there is a loop.
+    loopStr = None
+    
+    while True:
+        numList.append(str(numerator//denominator))  #add the integer part
+        cnt += 1
+        numerator = 10 * (numerator % denominator)
+        
+        if numerator == 0:
+            break
+        loc = loopDict.get(numerator)
+        if loc:  # if we found the duplicate numerator, then there must exist a loop
+            loopStr = "".join(numList[loc:cnt])
+            break
+        loopDict[numerator] = cnt  # if no duplicate numerator found, then we store key-pair numerator:location
+    
+    answer = numList[0]
+    
+    if len(numList)>1:
+        answer += "."
+    if loopStr:
+        answer += "".join(numList[1:len(numList)-len(loopStr)])+"("+loopStr+")"
+    else:
+        answer += "".join(numList[1:])
+    print(answer)
+    
+RecurringDecimal(21,9)
