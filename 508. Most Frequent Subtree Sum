@@ -1,0 +1,64 @@
+
+class TreeNode(object):
+     def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution(object):
+    def findFrequentTreeSum(self, root):
+        stack = [root]
+        mydict = {}
+        result = []
+
+        if not root:
+            return
+
+        while stack:
+            node = stack.pop(0)
+            temp = node.val
+
+            if not (node.left or node.right):
+                if mydict.get(temp):
+                    mydict[temp] = mydict.get(temp) +1
+                else:
+                    mydict[temp] = 1
+            else:
+                temp2 = self.sumNode(node)
+                if mydict.get(temp2):
+                    mydict[temp2] = mydict.get(temp2) +1
+                else:
+                    mydict[temp2] = 1
+
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+
+        max_value = max(mydict.values())
+
+        for m,n in mydict.items():
+
+            if n == max_value:
+                result.append(m)
+        print(f"this is {mydict}")
+        return result
+
+
+    def sumNode(self,root):
+        if not root:
+            return
+        if not root.left and not root.right:
+            #print(root.val)
+            return root.val
+        return root.val+self.sumNode(root.left)+self.sumNode(root.right)
+
+a = TreeNode(5)
+a.left = TreeNode(2)
+a.right = TreeNode(-5)
+#a.right.left = TreeNode(4)
+#a.right.right = TreeNode(5)
+
+b = Solution()
+print(b.findFrequentTreeSum(a))
+
