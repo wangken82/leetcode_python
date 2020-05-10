@@ -1,0 +1,25 @@
+class solution():
+    def minCamera(self,root):
+        self.cnt = 0
+        helper(root)
+        return self.cnt
+
+    def helper(self,root):
+        """##########################################################
+        each fuction return 3 values
+        State:None for leaf node or default
+        state: 1   covered
+        state:2   Camera set on this node
+        """##########################################################
+        if not root:
+            return 1 #set none node as covered to avoid action on leaf node.
+        left = self.helper(root.left)
+        right = self.helper(root.right)
+
+        if left == None or right == None:
+            self.cnt += 1
+            return 2
+        if left == 2 or right == 2:
+            return 1
+        return None
+            
