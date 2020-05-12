@@ -1,0 +1,39 @@
+use bucket and insert sort 
+
+class TreeNode(object):
+    def __init__(self,val):
+        self.mylist = [val]
+        self.left = None
+        self.right = None
+        
+class Solution(object):
+    def sortArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        return self.bucket_sort(nums)
+        
+    
+    def insertion_sort(self,nums):
+        
+        for i in range(1,len(nums)):
+            for j in range(0,i):
+                if nums[i] < nums[j]:              
+                    nums.insert(j,nums.pop(i))
+                    break
+        return nums
+    
+    def bucket_sort(self,nums):
+        result = []
+        minval,maxval = min(nums),max(nums)
+        if maxval == minval:
+            return nums
+        buckets = [[] for _ in range(0,1000)]
+        
+        for i in range(len(nums)):
+            buckets[((nums[i]-minval)*999)//(maxval-minval)].append(nums[i])
+        for bucket in buckets:
+            result.extend(self.insertion_sort(bucket))
+        return result
+        
