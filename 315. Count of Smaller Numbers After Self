@@ -1,0 +1,19 @@
+class Solution(object):
+    def countSmaller(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        position = 0
+        count = [0]
+        k = len(nums)
+        if k == 0:
+            return []
+        a = nums[k-1]
+        newlist = [a]
+        for i in range(len(nums)-2,-1,-1):
+            position = bisect.bisect_left(newlist,nums[i])
+            count.insert(0,position)
+            newlist.insert(position,nums[i])
+        return count
+        
