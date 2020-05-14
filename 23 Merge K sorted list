@@ -1,0 +1,26 @@
+from collections import defaultdict
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        value_list = []
+        mydict = defaultdict(list)
+        
+        for item in lists:
+            if item:
+                mydict[item.val].append(item)
+                value_list.append(item.val)
+        heapq.heapify(value_list)
+        dummy = head = ListNode()
+        while value_list:
+            low = heapq.heappop(value_list)
+            node = mydict[low].pop()
+            dummy.next = node
+            dummy = node
+            if node.next:
+                mydict[node.next.val].append(node.next)
+                heapq.heappush(value_list,node.next.val)
+        return head.next
