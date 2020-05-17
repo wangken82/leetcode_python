@@ -1,0 +1,27 @@
+from collections import defaultdict
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        mymap = defaultdict(Node)
+            
+        def deepcopy(head):
+            if not head:
+                return None
+            if head in mymap:
+                return mymap[head]
+            
+            newhead = Node(head.val,None,None)
+            mymap[head] = newhead
+            newhead.next = deepcopy(head.next)
+            newhead.random = deepcopy(head.random)
+            return newhead
+        
+        return deepcopy(head)
