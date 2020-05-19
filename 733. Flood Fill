@@ -1,0 +1,29 @@
+class Solution:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+        row = len(image)
+        if row == 0:return None
+        column = len(image[0])
+        visited = [[[0] for _ in range(column)] for _ in range(row)]
+        
+        
+        
+        
+        
+        
+        def dfs(image,m,n,visited,old_color,newColor):
+            if m < 0 or n < 0 or m>= row or n >= column or visited[m][n] == 1:
+                return
+            
+            visited[m][n] = 1
+            if image[m][n] != old_color:
+                return
+            else:
+                image[m][n] = newColor
+            
+            dfs(image,m+1,n,visited,old_color,newColor)
+            dfs(image,m-1,n,visited,old_color,newColor)
+            dfs(image,m,n+1,visited,old_color,newColor)
+            dfs(image,m,n-1,visited,old_color,newColor)
+        
+        dfs(image,sr,sc,visited,image[sr][sc],newColor)
+        return image
