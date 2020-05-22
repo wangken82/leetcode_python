@@ -1,0 +1,63 @@
+
+
+from collections import defaultdict
+class Solution:
+    def largestIsland(self, grid) -> int:
+        area = defaultdict(int)
+        color = 2
+        m = len(grid)
+        maxval = 0
+        if m == 0:
+            return 0
+        n = len(grid[0])
+        visited=[[0 for _ in range(n)] for _ in range(m)]
+        def dfs(i,j,color,area,m,n):
+            stack = []
+            stack.append([i,j])
+            while stack:
+                row,col = stack.pop()
+                grid[row][col] = color
+                if visited[row][col]:
+                    continue
+                else:
+                    visited[row][col] = 1
+                area[color] = area.get(color,0) + 1
+                
+                if (row +1 < m) and grid[row+1][col] == 1 and not visited[row+1][col]:
+                    stack.append([row+1,col])
+                if (row -1 >=0) and grid[row-1][col] == 1 and not visited[row-1][col]:
+                    stack.append([row-1,col])
+
+                if (col+1 <n) and grid[row][col+1] == 1 and not visited[row][col+1] :
+                    stack.append([row,col+1])
+                if (col-1 >= 0) and grid[row][col-1] and not visited[row][col-1]:
+                    stack.append([row,col-1])
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    dfs(i,j,color,area,m,n)
+                    color += 1
+
+        def cal_area(i,j):
+            if i< 0 or j<0 or i >=m or j >= n:
+                return 0
+            return grid[i][j]
+
+        if len(area):
+            maxval = max(area.values())
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 0:
+                    #print(f"find {i} {j}")
+                    abc = set([cal_area(i-1,j),cal_area(i+1,j),cal_area(i,j-1),cal_area(i,j+1)])
+                    temp = 1
+
+                    for item in abc:
+                        temp += area[item]
+
+                    maxval = max(temp,maxval)
+        return maxval
+思路就是找到ij这个点，然后如果ij这个点是1，那么无限找他相邻的点，最终找出一片岛屿，在这片岛屿的小岛上标记当前大岛的数量，
+最终可能找出n片岛屿群，每个岛屿群里面的小岛都写着自己的群号，  有一个数组记录群号对应的值，
+那么对于如果有个00的点，看一下周围4圈 的岛号，（记得利用set， 因为可能上下是一个岛号） 加起来就是最大岛屿值，
