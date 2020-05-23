@@ -1,0 +1,41 @@
+from collections import defaultdict
+class Solution:
+    def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
+        n = len(s)
+        if n == 0:
+            return None
+        father = {i:i for i in range(n)}
+        mapping = defaultdict(list)
+
+        
+        def union(x,y):
+            rootx = root(x)
+            rooty = root(y)
+            
+            if rootx != rooty:
+                father[rootx] = rooty
+        
+        
+        def root(x):
+            path = []            
+            while  x != father[x] :
+                path.append(x)
+                x = father[x]
+           #this step used to flat tree for next root function     
+            for item in path:
+                father[item] = x    
+            return x
+        
+        for a,b in pairs:
+            union(a,b)
+            
+        for i in range(n):
+            mapping[root(i)].append(s[i])
+        
+        for key in mapping:
+            mapping[key].sort(reverse=True)
+        mystr = ""   
+        for i in range(n):
+            mystr +=mapping[root(i)].pop()
+        return mystr
+        
