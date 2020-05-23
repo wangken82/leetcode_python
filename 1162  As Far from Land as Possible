@@ -1,0 +1,33 @@
+class Solution:
+    def maxDistance(self, grid: List[List[int]]) -> int:
+        m = len(grid)
+        if m == 0:
+            return -1
+        n = len(grid[0])
+        visited = [[-1] * n for _ in range(m)]
+        cnt = 0
+        level = []
+        posi =[(0,1),(0,-1),(1,0),(-1,0)]
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    level.append([i,j])
+                    visited[i][j] = 0
+                    cnt += 1
+         # cnt used to cal ,if no water or land ,then return -1
+        if cnt == 0 or cnt == m*n:
+            return -1
+        d = 0            
+        while level:
+            next_level = []
+            for i,j in level:
+                for row,col in posi:
+                    newi = i+row
+                    newj = j+col
+                    if 0<= newi <m and 0<= newj <n and visited[newi][newj] == -1:
+                        visited[newi][newj] = d+1
+                        next_level.append([newi,newj])
+            d +=1
+            level = next_level
+            
+        return d-1
