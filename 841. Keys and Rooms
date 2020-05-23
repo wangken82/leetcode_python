@@ -1,0 +1,20 @@
+from collections import defaultdict
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        n = len(rooms)
+        if n == 0:
+            return True
+        
+        self.visited = set()
+        
+        
+        def dfs(room):
+            if room in self.visited:
+                return
+            self.visited.add(room)
+            for item in rooms[room]:
+                dfs(item)
+        
+        dfs(0)
+        return len(self.visited) == n or False
+            
