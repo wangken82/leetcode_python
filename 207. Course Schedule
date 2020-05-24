@@ -1,0 +1,32 @@
+Create two dictionaries.
+
+count dictionary keeps number of prerequisite for each course.
+pre dictionary . For each key we keep a list of courses that this key is prerequisite of. so if 2 is prerequisite of 3 and 4 then pre[2] is [3,4]
+Initially we add all the courses withought any prerequisite to our queue. As long as this queue is not empty we pick a course and update the dictionaries. SO if we pick 2 we find [3,4] using pre dictionary and for each we decrement their value by one in the count dictionary. If the count dictionary for any of them is zero it means that their prerequisites have been met and they are ready to be picked so we add them to the queue.
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        pre = defaultdict(list)
+        count = {}
+        
+        for i in prerequisites:
+            pre[i[1]].append(i[0])
+            count[i[0]]=count.get(i[0],0) + 1
+            
+        queue = []
+        for i in range(numCourses):
+            if i not in count:
+                queue.append(i)
+        solution_count = 0       
+        while len(queue):
+            solution_count +=1
+            x = queue.pop(0)
+            for n in pre[x]:
+                count[n] -= 1
+                if count[n] == 0:
+                    del count[n]
+                    queue.append(n)
+        
+        if solution_count == numCourses:
+            return True
+        return False
