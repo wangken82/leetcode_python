@@ -1,0 +1,33 @@
+from collections import defaultdict
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        if numCourses == 0 :
+            return []
+        
+        pre = defaultdict(list)
+        queue = []
+        count = {}
+        for item in prerequisites:
+            pre[item[1]].append(item[0])
+            count[item[0]] = count.get(item[0],0) + 1
+        result = []
+        
+        for i in range(numCourses):
+            if i not in count:
+                queue.append(i)
+        
+        while queue:
+            course = queue.pop()
+            result.append(course)
+            
+            for item in pre[course]:
+                count[item] -= 1
+                if count[item] == 0:
+                    queue.append(item)
+                    del count[item]
+        
+        if len(result) < numCourses:
+            return []
+        else:
+            return result
+            
