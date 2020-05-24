@@ -1,0 +1,46 @@
+
+
+
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        state = ["unknown","visiting","safe","unsafe"]
+        node_count = len(graph)
+        node_state = ["unknown"] *node_count
+        mydict ={}  #used for speed up search
+        result = []
+        if node_count == 0:
+            return []
+      
+        
+        def dfs(i,graph,node_state):
+            if node_state[i] == "visiting":
+                return "unsafe"
+            if node_state[i] != "unknown":
+                return node_state[i] 
+            else:
+                node_state[i] = "visiting"
+                for item in graph[i]:
+                    if item in mydict:
+                        nextstatus = mydict[item]
+                        if nextstatus == "unsafe":
+                            node_state[i] = "unsafe"
+                            mydict[i] = "unsafe"
+                            return "unsafe" 
+                    else:
+                        if dfs(item,graph,node_state) == "unsafe":
+                            node_state[i] = "unsafe"
+                            mydict[i] = "unsafe"
+                            return "unsafe"
+                node_state[i] = "safe"
+                mydict[i] = "safe"
+                return "safe"
+        
+        for i in range(node_count):
+            node_state = ["unknown"] *node_count
+            if dfs(i,graph,node_state) == "safe":
+                result.append(i)
+        
+        return result
+                
+                
+                
