@@ -1,0 +1,77 @@
+DFS
+
+from collections import defaultdict
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        graph = defaultdict(dict)
+        
+        for (x,y),z in zip(equations,values):
+            graph[x][y] = z
+            graph[y][x] = 1/z
+            
+        
+        
+        def dfs(x,y,graph,visited):
+            if x not in graph:
+                return -1
+            if x == y :
+                return 1.0
+            if y in graph[x]:
+                return graph[x][y]
+            visited.add(x)
+            for item in graph[x]:
+                if item not in visited:             
+                    v = dfs(item,y,graph,visited)
+                    if v != -1:
+                        return graph[x][item] * v
+            return -1
+        
+        result = []
+        for x,y in queries:
+            if x not in graph:
+                result.append(-1.0)
+            else:
+                result.append(dfs(x,y,graph,set()))
+        
+        return result
+        
+        
+        
+        solution2 use Union
+            def find(self, x, UF):
+        if x != UF[x][0]:
+            px, pv = self.find(UF[x][0], UF)
+            UF[x] = (px, UF[x][1]*pv)
+        return UF[x]
+    
+    def divide(self, x, y, UF):
+        rx, vx = self.find(x, UF)
+        ry, vy = self.find(y, UF)
+        if rx != ry: return -1.0
+        return vx/vy
+    
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        UF = {}
+        for i in range(len(equations)):
+            x,y = equations[i]
+            value = values[i]
+            if x not in UF and y not in UF:
+                UF[x] = (y, value)
+                UF[y] = (y, 1.0)
+            elif x not in UF:
+                UF[x] = (y, value)
+            elif y not in UF:
+                UF[y] = (x, 1.0/value)
+            else:
+                rootx, valx = self.find(x, UF)
+                rooty, valy = self.find(y, UF)
+                UF[rootx] = (rooty, value*valy/valx)
+        
+        res = [] 
+        for x, y in queries:
+            # from x to y
+            if all(i in UF for i in (x,y)):
+                res.append(self.divide(x, y, UF))
+            else:
+                res.append(-1.0)
+        return res
