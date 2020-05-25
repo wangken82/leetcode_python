@@ -1,0 +1,42 @@
+from collections import defaultdict
+class Solution:
+    def numSimilarGroups(self, A: List[str]) -> int:
+        self.size = len(A)
+        father = {a:a for a in range(len(A))}    
+        
+        
+        def compare(a,b):
+            if len(a) != len(b):
+                return False
+            counter = 0
+            for i in range(len(a)):
+                if a[i] != b[i]:
+                    counter += 1
+                    if counter >2:
+                        return False
+            
+            return True
+        
+        def find(x):
+           
+            while father[x] != x:
+                x = father[x]           
+            return x
+        
+        def union(x,y):
+            rootx = find(x)
+            rooty = find(y)
+            if rootx == rooty:                
+                return
+            else:
+                father[rootx] = rooty
+                self.size -= 1
+         
+        for i in range(len(A)-1):
+            for j in range(i+1,len(A)):
+                if compare(A[i],A[j]):
+                    union(i,j)
+        
+        
+        return self.size
+        
