@@ -1,0 +1,96 @@
+solution 1 use DFS
+
+from collections import defaultdict
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        account_list = defaultdict(set)
+        email_to_account = {}
+        
+        for acc in accounts:
+            name = acc[0]
+            emails = acc[1:]
+            for email in emails:
+                account_list[acc[1]].add(email)
+                account_list[email].add(acc[1])
+                email_to_account[email] = acc[0]
+        
+        
+        visited = set()
+        result = []
+        for account in account_list:
+            if account in visited: continue
+            temp = []
+            visited.add(account)
+            stack = [account]
+            while stack:
+                new = stack.pop()
+                temp.append(new)
+                for item in account_list[new]:
+                    if item in visited: continue
+                    visited.add(item)
+                    stack.append(item)
+            
+            name = email_to_account[account]
+            value = sorted(temp)
+            value.insert(0,name)
+            result.append(value)
+        
+        return result
+        
+        
+        solution2 , use Union
+        
+        
+from collections import defaultdict
+class Union:
+    def __init__(self,x):
+        self.father = [i for i in range(x)]
+        
+    def find(self,x):
+        while x != self.father[x]:
+            self.father[x] = self.father[self.father[x]]
+            x = self.father[x]
+        return x
+    
+    def merge(self,x,y):
+        rootx = self.find(x)
+        rooty = self.find(y)
+        if rootx == rooty: return
+        self.father[rootx] = rooty  
+        
+        
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        email_to_name = {}
+        
+        for account in accounts:
+            name = account[0]
+            for email in account[1:]:
+                email_to_name[email] = name
+        
+        email_to_id ={email:idx for idx,email in enumerate(email_to_name.keys())}
+        
+        
+        n = len(email_to_id)
+        UF = Union(n)
+        
+        for account in accounts:
+            for email in account[2:]:
+                UF.merge(email_to_id[account[1]],email_to_id[email])
+                
+        
+        cluster = defaultdict(list)
+       
+        for email in email_to_name:
+            cluster[UF.find(email_to_id[email])].append(email)
+        
+        result = [] 
+        print(UF.father)
+        print(email_to_id)
+        print(cluster)
+        for emails in cluster.values():
+            name = email_to_name[emails[0]]
+            
+            result.append([name]+sorted(emails))
+        return result
+            
