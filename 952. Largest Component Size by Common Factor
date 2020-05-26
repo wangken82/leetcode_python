@@ -1,0 +1,52 @@
+解题思路就是 把每个Num和他本身的factor 做一个union， 在访问find的时候修剪路径。
+
+然后对所有的find(num) 做一个counter， 找出最多的节点就是了。  数据比较大，找最大影子就sqrt 往小即可。
+
+比如有2的因子的数字 就10个，3的有8个，  那么说明包含2做因子的component是最多的。
+
+
+import math
+from collections import defaultdict
+class Solution:
+    def largestComponentSize(self, A: List[int]) -> int:
+        maxelement = max(A)
+        father={i:i for i in range(maxelement+1)}
+        
+        def common(x,y):
+            if gcd(x,y) > 1:
+                return True
+            else:
+                return False
+        
+        def find(x):
+            while x != father[x]:
+                father[x] = father[father[x]]
+                x = father[x]
+            return x
+            
+        def union(x,y):
+            rootx = find(x)
+            rooty = find(y)
+            if rootx == rooty:
+                return
+            else:
+                father[rootx] = rooty
+        
+        
+        for num in A:
+            for devider in range(int(math.sqrt(num)),1,-1):
+                if num % devider == 0:
+                    union(num,devider)
+                    union(num,num//devider)
+        
+        count = 0
+        size = {}
+        for num in A:
+            parent = find(num)
+            if parent not in size:
+                size[parent] = 0
+            size[parent] +=1
+            count = max(count,size[parent])
+        
+        return count
+                
