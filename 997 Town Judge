@@ -1,0 +1,33 @@
+不一定最优解，但是能过
+
+from collections import defaultdict
+class Solution:
+    def findJudge(self, N: int, trust: List[List[int]]) -> int:
+        if len(trust) == 0:
+            if N ==1: 
+                return 1
+            else:
+                return -1
+        
+        graph = defaultdict(list)
+        counter = defaultdict(int)
+        nonjudge = []
+        for item in trust:
+            graph[item[1]].append(item[0])
+            nonjudge.append(item[0])
+            counter[item[1]] += 1
+        
+        maxval = max(counter.values())
+        
+        if maxval != N-1:
+            return -1
+    
+        temp = []
+        for i in counter:
+            if counter[i] == maxval:
+                temp.append(i)
+        
+        if len(temp) >1:
+            return -1
+        
+        return temp[0] if temp[0] not in nonjudge else -1
