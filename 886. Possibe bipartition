@@ -1,0 +1,57 @@
+solution 1 use DFS
+from collections import defaultdict
+class Solution:
+    def possibleBipartition(self, N: int, dislikes: List[List[int]]) -> bool:
+        nonlike = defaultdict(list)
+        
+        for item in dislikes:
+            nonlike[item[0]-1].append(item[1]-1)
+            nonlike[item[1]-1].append(item[0]-1)
+            
+        colors = [0] * N
+        # 0 for unknown,1 for red,-1 for blue [node,color] added to stack
+        
+        
+        def dfs(curr,color):
+            colors[curr] = color
+            for item in nonlike[curr]:
+                if colors[item] == color: return False
+                if (colors[item] ==0) and not dfs(item,-color): return False
+            return True
+        
+        for i in range(N):
+            if colors[i] == 0 and not dfs(i,1): return False
+        return True
+        
+        
+            
+            
+            
+ solution 2 use BFS
+from collections import defaultdict
+class Solution:
+    def possibleBipartition(self, N: int, dislikes: List[List[int]]) -> bool:
+        nonlike = defaultdict(list)
+        
+        for item in dislikes:
+            nonlike[item[0]-1].append(item[1]-1)
+            nonlike[item[1]-1].append(item[0]-1)
+            
+        color = [0] * N
+        # 0 for unknown,1 for red,-1 for blue [node,color] added to stack
+        
+        
+        for i in range(N):
+            if color[i] != 0:
+                continue
+            stack = [i]
+            color[i] = 1
+            while stack:
+                curr = stack.pop()
+                for item in nonlike[curr]:
+                    if color[item] == color[curr]: return False
+                    if color[item] == 0:
+                        color[item] = -color[curr]
+                        stack.append(item)
+            
+        return True
