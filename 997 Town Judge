@@ -31,3 +31,19 @@ class Solution:
             return -1
         
         return temp[0] if temp[0] not in nonjudge else -1
+
+
+
+高手的解
+from collections import defaultdict
+class Solution:
+    def findJudge(self, N: int, trust: List[List[int]]) -> int:
+        graph = [0]*(N+1)
+        for x, y in trust:
+            graph[y] += 1
+            graph[x] -= 1  #this make sure the judge not believe other
+        print(graph)
+        for i in range(1, N+1):
+            if graph[i] == N-1:
+                return i
+        return -1
