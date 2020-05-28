@@ -1,0 +1,43 @@
+from collections import defaultdict
+class Solution:
+    def numBusesToDestination(self, routes: List[List[int]], S: int, T: int) -> int:
+        # get dict for each station 
+        station = defaultdict(list)
+        if S == T :return 0
+        if len(routes) == 0: return -1
+        
+        for i in range(len(routes)):
+            for route in routes[i]:
+                station[route].append(i)
+        
+        
+        visited = [0] * len(routes)
+        print(station)
+        #put station in Stack
+        stack = [S]
+        step = 0
+        while stack:
+            step += 1
+            qsize = len(stack)
+            while qsize:
+                qsize -= 1
+                #must pop(0). or you get wrong result
+                curr = stack.pop(0)
+                for bus in station[curr]:
+                    if visited[bus] == 1:
+                        continue
+                    else:
+                        visited[bus] = 1
+                        for site in routes[bus]:
+                            if site == T:
+                                return step
+                            else:
+                                stack.append(site)
+        
+        return -1
+                            
+                    
+        
+            
+                    
+                    
