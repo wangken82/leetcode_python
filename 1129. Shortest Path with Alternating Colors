@@ -1,0 +1,43 @@
+from collections import defaultdict
+class Solution:
+    def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
+        red_graph = defaultdict(list)
+        blue_graph = defaultdict(list)
+        red_seen = set()
+        blue_seen = set()
+        for item in red_edges:
+            red_graph[item[0]].append(item[1])
+            
+   
+        for item in blue_edges:
+            blue_graph[item[0]].append(item[1])
+        
+        #set default value -1 for each node
+        result = [-1] * n
+        
+        #stack item, 1st= node, 2nd = color, color red =0, blue =1
+        # add first two step [0,1] begin from blue, [0,0] begin from red
+        stack =[[0,1],[0,0]]
+        red_seen.add(0)
+        blue_seen.add(0)
+        step = 0
+        while stack:
+            size = len(stack)
+            while size:
+                size -= 1
+                node,color = stack.pop(0)
+                graph = red_graph if color == 0 else blue_graph
+                seen = red_seen if color == 0 else blue_seen
+                
+                result [node] = min(result[node],step) if result[node] != -1 else step
+                
+                for item in graph[node]:
+                    if item not in seen:
+                        seen.add(item)
+                        stack.append([item,1-color])
+            step += 1
+        return result
+            
+        
+        
+        
