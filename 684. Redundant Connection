@@ -1,0 +1,28 @@
+from collections import defaultdict
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        father = {i:i for i in range(1,len(edges)+1)}
+        result = []
+        
+        def find(x):
+            while x != father[x]:
+                father[x] = father[father[x]]
+                x = father[x]
+            return x
+            
+            
+        def union(x,y,result):
+            rootx = find(x)
+            rooty = find(y)
+            if rootx == rooty:
+                result.append(x)
+                result.append(y)
+            else:
+                father[rootx] = rooty
+        
+        for item in edges:
+            union(item[0],item[1],result)
+            
+        
+        return result
+            
