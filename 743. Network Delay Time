@@ -24,3 +24,45 @@ class Solution:
                 maxval = max(maxval,result[i])
         
         return maxval
+        
+   solution2. Dijkstra
+   先mark result[K] = 0 , 然后在所有的result里面找到最小的定点，  把graph[u] 里面对应的定点v的值都检查一遍
+   假如 result[v] > result[u] + u->v的值 ，那么result[v]= result[u]+u->v
+   
+   from collections import defaultdict
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:        
+        graph = collections.defaultdict(list)
+       
+        for u,v,t in times:
+            graph[u-1].append([v-1,t])
+            
+        seen = [False] * N
+
+        result = [float('inf')] *N
+        result[K-1] = 0
+        
+        
+        def get_min(result,seen):
+            k = 0
+            minval = float('inf')
+            for i in range(N):
+                if result[i] < minval and seen[i] == False:
+                    minval = result[i]
+                    k = i
+
+            return k
+        
+        for i in range(N):
+            u = get_min(result,seen)
+            seen[u] = True
+            
+            for v,t in graph[u]:
+                if result[v] > result[u] + t and not seen[v]:
+                    result[v] = result[u] + t
+            
+        
+        if len(seen) < N or max(result) == float('inf'): return -1
+     
+        return max(result)
+
