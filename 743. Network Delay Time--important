@@ -2,67 +2,55 @@ solution 1: use bell-more.  repeat N times, N=node.  mark each node as infinite�
 then result[v] = result[u]+time.  There is a limitation for bell-more, if there is a cycle with negative sum, then could not use
 
 from collections import defaultdict
+import heapq
 class Solution:
-    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:        
         result = [float('inf')] * (N+1)
         result[K] = 0
-        #bell-more need repeat N times. N=node. if there is a cycle with negative sum, then could not use bell-more
+        
         for i in range(N):
             for time in times:
                 u = time[0]
                 v = time[1]
-                val = time[2]
-                #print(result)
-                #print(v)
-                if result[v] > result[u] + val:
-                    result[v] = result[u] + val
-        maxval = 0
-        for i in range(1,len(result)):
-            if result[i] == float('inf'):
-                return -1
-            else:
-                maxval = max(maxval,result[i])
+                t = time[2]
+                if result[v] > result[u]+t:
+                    result[v] = result[u]+t
         
-        return maxval
+        maxval = max(result[1:])
+        
+        return -1 if maxval == float('inf') else maxval
+
         
    solution2. Dijkstra
    先mark result[K] = 0 , 然后在所有的result里面找到最小的定点，  把graph[u] 里面对应的定点v的值都检查一遍
    假如 result[v] > result[u] + u->v的值 ，那么result[v]= result[u]+u->v
    
-   from collections import defaultdict
+from collections import defaultdict
+import heapq
 class Solution:
     def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:        
         graph = collections.defaultdict(list)
-       
-        for u,v,t in times:
-            graph[u-1].append([v-1,t])
+        for u,v,time in times:
+            graph[u].append([v,time])
             
-        seen = [False] * N
-
-        result = [float('inf')] *N
-        result[K-1] = 0
         
+        seen = [False] * (N+1)
+        result = [float('inf')] * (N+1)
         
-        def get_min(result,seen):
-            k = 0
-            minval = float('inf')
-            for i in range(N):
-                if result[i] < minval and seen[i] == False:
-                    minval = result[i]
-                    k = i
-
-            return k
+        result[K] = 0
         
-        for i in range(N):
-            u = get_min(result,seen)
+        stack = [[0,K]]
+        
+        while stack:
+            time,u = heapq.heappop(stack)
             seen[u] = True
-            
-            for v,t in graph[u]:
-                if result[v] > result[u] + t and not seen[v]:
-                    result[v] = result[u] + t
-            
+            for item in graph[u]:
+                v = item[0]
+                val = item[1]
+                if result[v] > result[u] + val and not seen[v]:
+                    result[v] = result[u] + val
+                    heapq.heappush(stack,[result[u]+val,v])
         
-        if len(seen) < N or max(result) == float('inf'): return -1
-     
-        return max(result)
-
+        maxval = max(result[1:])
+        
+        return maxval if maxval != float('inf') else -1
