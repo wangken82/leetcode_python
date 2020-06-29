@@ -1,0 +1,36 @@
+class Solution:
+    def maxCandies(self, status: List[int], candies: List[int], keys: List[List[int]], containedBoxes: List[List[int]], initialBoxes: List[int]) -> int:
+        n = len(status)
+        stor_key = [0] *n  #init the key for each box
+        locked = [0] *n #only store locked box
+        total = 0
+        stack = []  #only store open boxes
+        for box in initialBoxes:
+            if status[box] == 0:
+                locked[box] = 1
+            else:
+                stack.append(box)
+            
+         
+        while stack:
+          
+            temp = stack.pop(0)
+            total += candies[temp]
+            
+            for box in containedBoxes[temp]:
+                #add the open box into stack
+                if status[box] == 1:
+                    print("box ",box)
+                    stack.append(box)
+                else:
+                    #if status closed but we have key,then add to stack
+                    if stor_key[box] == 1:
+                        stack.append(box)
+                    else:
+                        locked[box] = 1
+            
+            for key in keys[temp]:   
+                if (stor_key[key] == 0) and locked[key] ==1: 
+                    stack.append(key)
+                stor_key[key] = 1
+        return total
