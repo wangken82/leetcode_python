@@ -1,0 +1,27 @@
+from collections import defaultdict
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        graph = defaultdict(list)
+        for ticket in tickets:
+            graph[ticket[0]].append(ticket[1])
+        
+        
+        for key in graph:
+            graph[key].sort()
+            
+        result = []
+        
+        stack = [("JFK")]
+        
+        while stack:
+            curr = stack[-1]
+            
+            if curr in graph and len(graph[curr]) >0:
+                stack.append(graph[curr].pop(0))
+            else:
+                result.append(stack.pop())  #pop the last element and append to result 
+        return result[::-1]
+                
+        
+'''这道题的本质是计算一个最"小"的欧拉路径(Eulerian path)。对于一个节点（当然先从JFK开始)，贪心地访问最小的邻居，访问过的边全部删除。当碰到死路的时候就回溯到最近一个还有出路的节点，然后把回溯的路径放到最后去访问，这个过程和后序遍历的一样。1. 如果子节点没有死路（每个节点都只左子树），前序遍历便是欧拉路径。2. 如果子节点1是死路，子节点2完成了遍历，那么子节点2先要被访问。1，2都和后序遍历的顺序正好相反。'''   
+        
