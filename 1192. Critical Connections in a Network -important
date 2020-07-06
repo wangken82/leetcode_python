@@ -1,0 +1,46 @@
+1192. Critical Connections in a Network
+
+There are n servers numbered from 0 to n-1 connected by undirected server-to-server connections forming a network where connections[i] = [a, b] represents a connection between servers a and b. Any server can reach any other server directly or indirectly through the network.
+
+A critical connection is a connection that, if removed, will make some server unable to reach some other server.
+
+Return all critical connections in the network in any order.
+
+
+##################################################
+from collections import defaultdict
+class Solution:
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        graph = defaultdict(set)
+        for u,v in connections:
+            graph[u].add(v)
+            graph[v].add(u)
+        
+        step = [-1] * n #-1 represent for never visited, else update the distance value
+        result = []
+        level = 0
+        
+        # this dfs fuction return the level for current node
+        def dfs(curr,father,level,step,result,graph):
+            step[curr] = level + 1
+            for child in graph[curr]:
+               
+                if child == father:
+                    continue
+                # -1 means this child never visited
+                elif step[child] == -1:                    
+                    step[curr]= min(step[curr],dfs(child,curr,level+1,step,result,graph))
+                else:
+                    step[curr] = min(step[curr],step[child])
+                    
+            #if the current value never changed after route all child,then means it's child no route to curr's father.
+            # this means that the curr and its father is a critial path
+            if step[curr] == level+1 and curr!=0:
+                result.append((curr,father))
+            
+            
+            return step[curr]
+        
+        #here we image begin from node 0, add a presudo father -1 for node 0.
+        dfs(0,-1,0,step,result,graph)
+        return result
