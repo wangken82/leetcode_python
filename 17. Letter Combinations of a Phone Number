@@ -1,0 +1,33 @@
+from collections import defaultdict
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        graph = defaultdict(list)
+        char = 97   # 97 for char a
+        self.result = []
+        if len(digits) == 0:
+            return []
+        n = int(digits)
+        for i in range(2,10):
+            size = 4 if (i == 7 or i ==9) else 3
+            while size:
+                graph[i].append(chr(char))
+                char += 1
+                size -= 1
+        
+        def dfs(n):
+            if n == 0:
+                return [""]
+            
+            small = n//10
+            remain = n%10
+            
+            so = dfs(small)
+            
+            op = []
+            
+            for s in so:
+                for ele in graph[remain]:
+                    op.append(s+ele)
+            return op
+        
+        return dfs(n)
