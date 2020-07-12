@@ -1,0 +1,54 @@
+Given an array A of non-negative integers, the array is squareful if for every pair of adjacent elements, their sum is a perfect square.
+
+Return the number of permutations of A that are squareful.  Two permutations A1 and A2 differ if and only if there is some index i such that A1[i] != A2[i].
+
+ 
+
+Example 1:
+
+Input: [1,17,8]
+Output: 2
+Explanation: 
+[1,8,17] and [17,8,1] are the valid permutations.
+Example 2:
+
+Input: [2,2,2]
+Output: 1
+
+
+import math
+class Solution:
+    def numSquarefulPerms(self, A: List[int]) -> int:
+        size = len(A)
+        used = [0] * size 
+        
+        def squareful(x,y):
+            s = int(math.sqrt(x+y))
+            return s*s == x+y
+        
+        
+        def dfs(A,curr,used):
+            if len(curr) == size:
+                self.ans += 1
+             
+            for i in range(size):
+                if used[i]:
+                    continue
+                    
+                # Prune,  if the new item not squreful with the last item in curr, then ignore it    
+                if len(curr) and not squareful(curr[-1],A[i]):
+                    continue
+                # if A[i-1] used, then A[i] can be considered.  if A[i-1] not used, then we also dont use A[i] to make sure the first one be used 
+                if i>0 and A[i] == A[i-1] and not used[i-1] :
+                    continue
+                
+                used[i] = 1
+                curr.append(A[i])
+                dfs(A,curr,used)
+                used[i] = 0
+                curr.pop()
+        
+        self.ans = 0
+        A.sort()
+        dfs(A,[],used)
+        return self.ans
