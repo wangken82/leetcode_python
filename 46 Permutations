@@ -1,0 +1,23 @@
+
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        size = len(nums)
+        visited = [0] * size
+        result = []
+        def dfs(curr,nums):
+            if len(curr) == size:
+                result.append(curr[:])
+                return
+            
+            for i in range(size):
+                if visited[i]:
+                    continue
+                visited[i] = 1
+                curr.append(nums[i])
+                dfs(curr,nums)
+                curr.pop()
+                visited[i] = 0
+        
+        dfs([],nums)
+        return result
