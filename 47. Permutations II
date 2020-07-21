@@ -1,0 +1,41 @@
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+
+######################
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        result = []
+        size = len(nums)
+        visited = [0] * size
+        def dfs(curr,visited):
+            if len(curr) == size:
+                result.append(curr[:])
+                print(curr)
+                return
+            
+            for i in range(size):
+                if visited[i]:
+                    continue
+                
+                #假如i 跟i-1 数值一样，且i-1 没有访问过，那么先不要访问i，正常情况下i-1 一定是先访问的
+                if i >0 and not visited[i-1] and nums[i] == nums[i-1]:
+                    continue
+                visited[i] = 1
+                curr.append(nums[i])
+                dfs(curr,visited)
+                curr.pop()
+                visited[i] = 0
+        
+        dfs([],visited)
+        return result
