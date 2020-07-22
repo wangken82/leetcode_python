@@ -1,0 +1,35 @@
+class Solution:
+    def letterCasePermutation(self, S: str) -> List[str]:
+        
+        #curr for current combination, will check the head of next string
+        
+        self.result = []
+        
+        def dfs(curr,mystr):
+            if len(mystr) == 0:
+                self.result = curr.copy()
+                print(f"this is result {self.result}")
+                return 
+            
+
+            if mystr[0].isdigit():
+                if not curr:
+                    curr.append(mystr[0])
+                else:
+                    for i in range(len(curr)):
+                        curr[i] = curr[i]+str(mystr[0])
+            else:
+                temp = []
+                if not curr:
+                    curr.append(mystr[0].lower())
+                    curr.append(mystr[0].upper())
+                else:
+                    for i in range(len(curr)):
+                        temp.append(curr[i]+mystr[0].lower())
+                        temp.append(curr[i]+mystr[0].upper())
+                    curr = temp
+            
+            dfs(curr,mystr[1:])
+        
+        dfs([],S)
+        return self.result
