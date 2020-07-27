@@ -1,0 +1,64 @@
+
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Example 1:
+
+Input: "()())()"
+Output: ["()()()", "(())()"]
+Example 2:
+
+Input: "(a)())()"
+Output: ["(a)()()", "(a())()"]
+Example 3:
+
+Input: ")("
+Output: [""]
+
+######################
+
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        left = right = 0
+        N = len(s)
+        if N == 0:
+            return [""]
+        
+        for i in range(N):
+            if s[i] == "(":
+                left += 1
+            if s[i] == ")":
+                left -= 1
+                if left < 0:
+                    right += 1
+                    left = 0
+        self.result = set()
+        '''
+        curr = current combination
+        curr_left, current unclosed left (
+        index current check index of string
+        left/right: how many left/right ( needs to be removed
+        '''
+        def backtrack(curr,curr_left,index,left,right):
+            
+            if index == N and left == 0 and right == 0:
+                self.result.add(curr)
+            if index >= N:
+                return
+            if s[index] == ")":
+                if right > 0:
+                    backtrack(curr,curr_left,index+1,left,right-1)  # drop the current )
+                if curr_left > 0:  
+                    backtrack(curr+")",curr_left-1,index+1,left,right)  #include this ), then the cumulative ( will -1 .
+            elif s[index] == "(":
+                if left > 0:
+                    backtrack(curr,curr_left,index+1,left-1,right)   #drop the currnet (
+                backtrack(curr+"(",curr_left+1,index+1,left,right)   #include this (
+            else:  #skip the char
+                backtrack(curr+s[index],curr_left,index+1,left,right)
+        
+        backtrack("",0,0,left,right)
+        
+        return self.result
+                
