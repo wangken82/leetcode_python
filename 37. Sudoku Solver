@@ -1,0 +1,60 @@
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Empty cells are indicated by the character '.'.
+
+
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        Row[x][i] = 1 --> means at Row x, i was used
+        Col[y][i] = 1  --> means at Col y, i was used
+        we will form 9 boxes.  Box id = (x/3)*3 +(y/3)
+        box[id][i] --> means at Box id, i was used
+        """
+        row = [[0] *10 for _ in range(9)]  #row[x][0] not used
+        col = [[0] *10 for _ in range(9)]  #col[x][0] not used
+        box = [[0] *10 for _ in range(9)]  #box[x][0] not used
+        
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    val = int(board[i][j])
+                    box_id = (i//3)*3+(j//3)
+                    row[i][val] = 1
+                    col[j][val] = 1
+                    box[box_id][val] = 1
+        
+        def backtrack(x,y,row,col,box):
+            if x == 9:
+                return True  # x=9 means all rows calcualted. default 0-8
+            
+            newy = (y+1) % 9  #y start from 0, need add 1 to begin
+            newx = x+1 if newy == 0 else x
+            
+            if board[x][y] != ".":
+                return backtrack(newx,newy,row,col,box)
+            
+            for i in range(1,10):
+                box_key = (x//3)*3+(y//3)
+                if not row[x][i] and not col[y][i] and not box[box_key][i]:
+                    row[x][i] = 1
+                    col[y][i] =1
+                    box[box_key][i] =1
+                    board[x][y] = str(i)
+                    if backtrack(newx,newy,row,col,box):
+                        return True
+                    board[x][y] = "."
+                    box[box_key][i] = 0
+                    row[x][i] = 0
+                    col[y][i] = 0
+            return False
+        
+        backtrack(0,0,row,col,box)
+        
+        
+                    
+        
