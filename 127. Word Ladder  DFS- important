@@ -1,0 +1,33 @@
+import string
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        s1 = [beginWord]
+        s2 = [endWord]
+        if endWord not in wordList:
+            return 0
+        wordDict = set(wordList)
+        wordDict.remove(endWord)
+        step = 0
+        l = len(beginWord)
+        while len(s1)>0 :  #here len(S1) always <= len(s2), so only check S1 enough
+            step += 1
+            if len(s1) > len(s2):
+                s1,s2 = s2,s1
+            
+            size = len(s1)
+            newlist = []
+            while size:
+                temp = s1.pop()
+                changeword = [temp[:i]+t+temp[i+1:] for t in string.ascii_lowercase for i in range(l)]
+                for item in changeword:
+                    if item in s2:
+                        return step + 1
+                    if item not in wordDict:
+                        continue
+                    newlist.append(item)
+                    wordDict.remove(item)
+                size -= 1
+            s1 = newlist
+            
+        
+        return 0
