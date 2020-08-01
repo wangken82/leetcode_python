@@ -78,31 +78,39 @@ class Solution(object):
 
 -------------------------------
 solution 2, much more quick than first solution
+from collections import defaultdict
 class Solution:
     def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
         if endWord not in wordList: return []
         
-        graph = dict()
+        graph = defaultdict(list)
         for word in wordList:
             for i in range(len(word)):
-                graph.setdefault(word[:i] + "*" + word[i+1:], []).append(word)
+                nword = word[:i] + "*" + word[i+1:]
+                graph[nword].append(word)
                 
+             
         ans = []
         front0, front1 = {beginWord: [[beginWord]]}, {endWord:[[endWord]]} #word & sequences ending in word
-        seen = {beginWord, endWord}
+        seen = {beginWord, endWord}  #seen is a set
         reverse = False 
         
         while front0 and front1 and not ans:
             if len(front0) > len(front1): front0, front1, reverse = front1, front0, not reverse 
-            temp = dict()
+            temp = defaultdict(list)
+            print(front0)
             for word, seq in front0.items(): 
                 for i in range(len(word)): 
-                    for node in graph.get(word[:i] + "*" + word[i+1:], []): 
+                    newword = word[:i] + "*" + word[i+1:]
+                    for node in graph.get(newword,[]): 
                         if node in front1: 
                             ans.extend([y + x[::-1] if reverse else x + y[::-1] for x in seq for y in front1[node]])
                         if node in seen: continue
+                        print("now seq",seq)
                         for x in seq: 
-                            temp.setdefault(node, []).append(x + [node])
-            seen |= set(temp.keys()) #has to be updated level-by-level
+                            temp[node].append(x + [node])
+                            
+                        #print(temp)
+            seen |= set(temp.keys()) #has to be updated level-by-level,add the keys to seen set
             front0 = temp 
         return ans 
